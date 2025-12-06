@@ -1,0 +1,32 @@
+{
+  "name": "backend-predictive-machine-copilot",
+  "version": "1.0.0",
+  "description": "Backend API untuk Predictive Machine Copilot dengan AI Chatbot dan Real-time Machine Monitoring System",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "jest"
+  },
+  "keywords": ["api", "chatbot", "machine-monitoring", "predictive-maintenance", "ai", "gemini", "langchain", "streaming", "iot"],
+  "author": "Predictive Machine Copilot Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "dotenv": "^16.3.1",
+    "morgan": "^1.10.0",
+    "express-rate-limit": "^7.1.5",
+    "joi": "^17.11.0",
+    "uuid": "^9.0.1",
+    "@langchain/google-genai": "^0.0.9",
+    "langchain": "^0.1.0",
+    "google-auth-library": "^9.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  }
+}

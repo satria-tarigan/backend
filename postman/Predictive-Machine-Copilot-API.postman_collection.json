@@ -1,0 +1,813 @@
+{
+  "info": {
+    "_postman_id": "predictive-machine-copilot-api-v1",
+    "name": "Predictive Machine Copilot API v1.0",
+    "description": "Complete API collection for Predictive Machine Copilot backend with AI Chatbot, Machine Monitoring, and Maintenance Ticketing System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "key": "sessionId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "noauth"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "General",
+      "item": [
+        {
+          "name": "API Info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": []
+            },
+            "description": "Get basic API information"
+          },
+          "response": []
+        },
+        {
+          "name": "API Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "status"
+              ]
+            },
+            "description": "Check API status"
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Health check endpoint"
+          },
+          "response": []
+        }
+      ],
+      "description": "General API endpoints"
+    },
+    {
+      "name": "Chatbot",
+      "item": [
+        {
+          "name": "Chat with AI",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Halo, saya butuh bantuan membuat tiket support\",\n  \"sessionId\": \"{{sessionId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/chatbot/chat",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chatbot",
+                "chat"
+              ]
+            },
+            "description": "Send message to AI chatbot"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.sessionId) {",
+                  "        pm.collectionVariables.set('sessionId', response.data.sessionId);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Chat History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/chatbot/history/{{sessionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chatbot",
+                "history",
+                "{{sessionId}}"
+              ]
+            },
+            "description": "Get chat history by session ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Chat Session",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/chatbot/session/{{sessionId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chatbot",
+                "session",
+                "{{sessionId}}"
+              ]
+            },
+            "description": "Clear chat session"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chatbot Config",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/chatbot/config",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chatbot",
+                "config"
+              ]
+            },
+            "description": "Get chatbot configuration"
+          },
+          "response": []
+        }
+      ],
+      "description": "Chatbot AI endpoints using Langchain and Gemini"
+    },
+    {
+      "name": "Ticketing",
+      "item": [
+        {
+          "name": "Create Ticket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Tidak bisa login ke dashboard\",\n  \"description\": \"Saya sudah mencoba login beberapa kali dengan email dan password yang benar, tapi selalu muncul pesan error. Ini sudah terjadi sejak 2 hari yang lalu.\",\n  \"category\": \"technical\",\n  \"priority\": \"high\",\n  \"requesterName\": \"John Doe\",\n  \"requesterEmail\": \"john.doe@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ticketing/tickets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ticketing",
+                "tickets"
+              ]
+            },
+            "description": "Create a new support ticket"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Tickets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ticketing/tickets?status=open&page=1&limit=10&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ticketing",
+                "tickets"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "open",
+                  "description": "Filter by status (open, in_progress, resolved, closed)"
+                },
+                {
+                  "key": "category",
+                  "value": "technical",
+                  "description": "Filter by category",
+                  "disabled": true
+                },
+                {
+                  "key": "priority",
+                  "value": "high",
+                  "description": "Filter by priority (low, medium, high, urgent)",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "description": "Sort field"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "Sort order (asc, desc)"
+                }
+              ]
+            },
+            "description": "Get all tickets with filtering and pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Ticket by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ticketing/tickets/{{ticketId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ticketing",
+                "tickets",
+                "{{ticketId}}"
+              ]
+            },
+            "description": "Get specific ticket by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Ticket",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\",\n  \"assignedTo\": \"support.agent@company.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ticketing/tickets/{{ticketId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ticketing",
+                "tickets",
+                "{{ticketId}}"
+              ]
+            },
+            "description": "Update ticket status or priority"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Ticket",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ticketing/tickets/{{ticketId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ticketing",
+                "tickets",
+                "{{ticketId}}"
+              ]
+            },
+            "description": "Delete a ticket"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authorName\": \"Support Agent\",\n  \"authorEmail\": \"support@company.com\",\n  \"content\": \"Kami sedang memeriksa masalah Anda. Mohon tunggu beberapa saat.\",\n  \"isInternal\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ticketing/tickets/{{ticketId}}/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ticketing",
+                "tickets",
+                "{{ticketId}}",
+                "comments"
+              ]
+            },
+            "description": "Add comment to ticket"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ticketing/analytics",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ticketing",
+                "analytics"
+              ]
+            },
+            "description": "Get ticket analytics and statistics"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/ticketing/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "ticketing",
+                "categories"
+              ]
+            },
+            "description": "Get available ticket categories"
+          },
+          "response": []
+        }
+      ],
+      "description": "Ticketing system endpoints"
+    },
+    {
+      "name": "Data Streaming",
+      "item": [
+        {
+          "name": "Ingest Streaming Data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"machine_id\": \"MCH-001\",\n  \"timestamp\": \"2025-12-06T10:30:00Z\",\n  \"metrics\": {\n    \"air_temperature\": 298.5,\n    \"process_temperature\": 308.7,\n    \"rotational_speed\": 2860,\n    \"torque\": 42.3,\n    \"tool_wear\": 120,\n    \"quality_variant\": \"M\",\n    \"machine_failure\": false\n  },\n  \"status\": \"active\",\n  \"location\": \"factory_floor_north\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/ingest",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "ingest"
+              ]
+            },
+            "description": "Ingest streaming data from machines"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Machines Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/machines/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "machines",
+                "status"
+              ]
+            },
+            "description": "Get all machines status"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Latest Machine Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/machines/MCH-001/latest",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "machines",
+                "MCH-001",
+                "latest"
+              ]
+            },
+            "description": "Get latest data for specific machine"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Machine History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/machines/MCH-001/history?limit=50&offset=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "machines",
+                "MCH-001",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "from",
+                  "value": "2025-12-06T00:00:00Z",
+                  "description": "Filter from date",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2025-12-06T23:59:59Z",
+                  "description": "Filter to date",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get historical data for specific machine"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Streaming Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/analytics?timeRange=1h",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "analytics"
+              ],
+              "query": [
+                {
+                  "key": "timeRange",
+                  "value": "1h",
+                  "description": "Time range: 1h, 24h, 7d"
+                }
+              ]
+            },
+            "description": "Get streaming analytics and statistics"
+          },
+          "response": []
+        }
+      ],
+      "description": "Data streaming endpoints for machine data ingestion"
+    },
+    {
+      "name": "Example Workflows",
+      "item": [
+        {
+          "name": "Complete Ticket Workflow",
+          "item": [
+            {
+              "name": "1. Create Ticket",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Error saat melakukan pembayaran\",\n  \"description\": \"Saya mencoba melakukan pembayaran untuk paket premium, tetapi setelah mengisi data kartu kredit, muncul error 'Payment Failed'. Saya sudah mencoba dengan kartu kredit berbeda tetapi hasilnya sama.\",\n  \"category\": \"billing\",\n  \"priority\": \"urgent\",\n  \"requesterName\": \"Jane Smith\",\n  \"requesterEmail\": \"jane.smith@example.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/ticketing/tickets",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "ticketing",
+                    "tickets"
+                  ]
+                },
+                "description": "Create a new billing ticket"
+              },
+              "response": [],
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201) {",
+                      "    const response = pm.response.json();",
+                      "    if (response.data && response.data.id) {",
+                      "        pm.collectionVariables.set('ticketId', response.data.id);",
+                      "    }",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "2. Get Ticket Details",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/ticketing/tickets/{{ticketId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "ticketing",
+                    "tickets",
+                    "{{ticketId}}"
+                  ]
+                },
+                "description": "Get details of the created ticket"
+              },
+              "response": []
+            },
+            {
+              "name": "3. Update Ticket Status",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"in_progress\",\n  \"assignedTo\": \"billing.support@company.com\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/ticketing/tickets/{{ticketId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "ticketing",
+                    "tickets",
+                    "{{ticketId}}"
+                  ]
+                },
+                "description": "Update ticket to in progress"
+              },
+              "response": []
+            },
+            {
+              "name": "4. Add Comment",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authorName\": \"Billing Support\",\n  \"authorEmail\": \"billing.support@company.com\",\n  \"content\": \"Hi Jane, kami sudah menerima laporan Anda. Tim pembayaran sedang memeriksa transaksi yang gagal. Kami akan menghubungi Anda dalam 2x24 jam.\",\n  \"isInternal\": false\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/ticketing/tickets/{{ticketId}}/comments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "ticketing",
+                    "tickets",
+                    "{{ticketId}}",
+                    "comments"
+                  ]
+                },
+                "description": "Add response comment to ticket"
+              },
+              "response": []
+            },
+            {
+              "name": "5. Resolve Ticket",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"resolved\",\n  \"resolution\": \"Payment gateway issue has been resolved. User can now make payments normally.\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/ticketing/tickets/{{ticketId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "ticketing",
+                    "tickets",
+                    "{{ticketId}}"
+                  ]
+                },
+                "description": "Mark ticket as resolved"
+              },
+              "response": []
+            }
+          ],
+          "description": "Complete workflow from ticket creation to resolution"
+        },
+        {
+          "name": "Chatbot Ticket Creation",
+          "item": [
+            {
+              "name": "1. Start Chat for Ticket Creation",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Saya ingin membuat tiket untuk masalah teknis dengan login\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/chatbot/chat",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chatbot",
+                    "chat"
+                  ]
+                },
+                "description": "Start chat with AI to create ticket"
+              },
+              "response": []
+            },
+            {
+              "name": "2. Provide Details",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Judul: Tidak bisa login ke sistem\\nDeskripsi: Sudah 3 hari tidak bisa login dengan password yang benar\\nKategori: technical\\nPrioritas: high\\nNama: Ahmad\\nEmail: ahmad@example.com\",\n  \"sessionId\": \"{{sessionId}}\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/chatbot/chat",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chatbot",
+                    "chat"
+                  ]
+                },
+                "description": "Provide ticket details through chat"
+              },
+              "response": []
+            }
+          ],
+          "description": "Create ticket through AI chatbot"
+        }
+      ],
+      "description": "Common workflows and example API calls"
+    }
+  ]
+}
